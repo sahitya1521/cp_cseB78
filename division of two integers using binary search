@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+#include <stdio.h>
+#include <limits.h>
+
+int main() {
+    int dividend, divisor;
+    scanf("%d %d", &dividend, &divisor);
+
+    // Handle overflow case
+    if (dividend == INT_MIN && divisor == -1) {
+        printf("%d", INT_MAX);
+        return 0;
+    }
+
+    long long dvd = dividend;
+    long long dvs = divisor;
+
+    // Determine sign
+    int sign = ((dvd < 0) ^ (dvs < 0)) ? -1 : 1;
+
+    // Convert to positive
+    if (dvd < 0) dvd = -dvd;
+    if (dvs < 0) dvs = -dvs;
+
+    long long quotient = 0;
+
+    while (dvd >= dvs) {
+        long long temp = dvs;
+        long long multiple = 1;
+
+        while ((temp << 1) <= dvd) {
+            temp <<= 1;
+            multiple <<= 1;
+        }
+
+        dvd -= temp;
+        quotient += multiple;
+    }
+
+    if (sign < 0)
+        quotient = -quotient;
+
+    printf("%lld", quotient);
+
+    return 0;
+}
