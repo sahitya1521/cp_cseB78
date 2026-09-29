@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main() {
+    long long N;
+    int K;
+    scanf("%lld %d", &N, &K);
+    
+    printf("%lld\n", N ^ (1LL << K));
+    
+    return 0;
+}
