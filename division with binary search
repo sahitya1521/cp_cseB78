@@ -1,0 +1,61 @@
+import sys
+
+def divide(x, y):
+    # Handle division by zero
+    if y == 0:
+        return "Division by zero"
+    
+    # Handle zero numerator
+    if x == 0:
+        return 0
+
+    # Determine sign of the result
+    is_negative = (x < 0) ^ (y < 0)
+
+    # Work with positive numbers for binary search
+    abs_x = abs(float(x))
+    abs_y = abs(float(y))
+
+    # Initial range for binary search
+    # Set high bound to handle cases where x < y or abs_x > 1
+    low = 0.0
+    high = max(1.0, abs_x, abs_x / abs_y)
+    
+    precision = 1e-7
+
+    # Binary search for mid such that abs_y * mid is close to abs_x
+    while low <= high:
+        mid = (low + high) / 2.0
+        product = abs_y * mid
+
+        # Check if product is almost equal to abs_x within precision tolerance
+        if abs(product - abs_x) < precision:
+            break
+        elif product < abs_x:
+            low = mid
+        else:
+            high = mid
+
+    # Apply sign to the result
+    result = -mid if is_negative else mid
+
+    # Format result: Return as integer if it is a whole number
+    if abs(result - round(result)) < 1e-5:
+        return int(round(result))
+    else:
+        return round(result, 6)
+
+def main():
+    # Read all tokens from standard input safely
+    input_data = sys.stdin.read().split()
+    if len(input_data) < 2:
+        return
+
+    x = float(input_data[0])
+    y = float(input_data[1])
+
+    result = divide(x, y)
+    print(result)
+
+if __name__ == "__main__":
+    main()
