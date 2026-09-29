@@ -1,0 +1,17 @@
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+A, B = map(int, input().split())
+
+def gcd(a, b):
+    if b == 0:
+        return a, 1, 0
+
+    d, x1, y1 = gcd(b, a % b)
+
+    x = y1
+    y = x1 - (a // b) * y1
+
+    return d, x, y
+
+D, x, y = gcd(A, B)
+
+print(x, y, D) 
