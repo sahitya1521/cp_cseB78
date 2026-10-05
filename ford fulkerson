@@ -1,0 +1,71 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+int V, E;
+int capacity[100][100];
+bool visited[100];
+
+int dfs(int u, int sink, int flow)
+{
+    if (u == sink)
+        return flow;
+
+    visited[u] = true;
+
+    for (int v = 0; v < V; v++)
+    {
+        if (!visited[v] && capacity[u][v] > 0)
+        {
+            int possibleFlow = min(flow, capacity[u][v]);
+
+            int result = dfs(v, sink, possibleFlow);
+
+            if (result > 0)
+            {
+                capacity[u][v] -= result;
+                capacity[v][u] += result;
+
+                return result;
+            }
+        }
+    }
+
+    return 0;
+}
+
+int main()
+{
+    cin >> V >> E;
+
+    memset(capacity, 0, sizeof(capacity));
+
+    for (int i = 0; i < E; i++)
+    {
+        int u, v, c;
+        cin >> u >> v >> c;
+
+        capacity[u][v] += c;
+    }
+
+    int source = 0;
+    int sink = V - 1;
+
+    int maxFlow = 0;
+
+    while (true)
+    {
+        memset(visited, false, sizeof(visited));
+
+        int flow = dfs(source, sink, 1000000000);
+
+        if (flow == 0)
+            break;
+
+        maxFlow += flow;
+    }
+
+    cout << maxFlow << endl;
+
+    return 0;
+}
