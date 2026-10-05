@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    int N;
+    cin >> N;
+
+    vector<double> a(N);
+
+    for (int i = 0; i < N; i++)
+        cin >> a[i];
+
+    // Find minimum and maximum
+    double minVal = a[0];
+    double maxVal = a[0];
+
+    for (int i = 1; i < N; i++)
+    {
+        minVal = min(minVal, a[i]);
+        maxVal = max(maxVal, a[i]);
+    }
+
+    // Create buckets
+    vector<vector<double>> buckets(N);
+
+    // Put elements into buckets
+    for (int i = 0; i < N; i++)
+    {
+        int index;
+
+        if (maxVal == minVal)
+            index = 0;
+        else
+            index = (int)((a[i] - minVal) / (maxVal - minVal) * (N - 1));
+
+        buckets[index].push_back(a[i]);
+    }
+
+    // Sort each bucket
+    for (int i = 0; i < N; i++)
+    {
+        sort(buckets[i].begin(), buckets[i].end());
+    }
+
+    // Print sorted array
+    for (int i = 0; i < N; i++)
+    {
+        for (double x : buckets[i])
+        {
+            // Print integer values without .00
+            if (x == (int)x)
+                cout << (int)x << " ";
+            else
+                cout << fixed << setprecision(2) << x << " ";
+        }
+    }
+
+    return 0;
+}
